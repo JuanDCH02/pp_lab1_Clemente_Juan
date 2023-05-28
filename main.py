@@ -1,6 +1,13 @@
 import re
 import json
+import os
 
+def clear_console():
+    '''
+    limpia la consola esperando una tecla
+    '''
+    _ = input("Press a key to continue...")
+    os.system("cls")
 
 def imprimir_menu():
     '''
@@ -268,8 +275,7 @@ def print_player_max_stat(player:dict, stat:str):
     :param player: diccionario del jugador
     :param stat: estadistica a imprimir
     :return: nada
-    '''
-    
+    ''' 
     print("El jugador con mas {0} es: \n".format(normalize_string(stat)))
     print("Nombre: {0} -> {1}: {2}".format(player["nombre"],
                             normalize_string(stat), player["estadisticas"][stat]))
@@ -283,7 +289,6 @@ def print_player_above_average(lista_jugadores:list, stat:str, average:float,pos
     :param pos: imprimir posicion 
     :return: nada
     '''
-
     print("Los jugadores que superan los: {0} {1} son: ".format(average, 
                                                     normalize_string(stat)))
     
@@ -343,6 +348,14 @@ def member_HOF(player:dict):
             print("el jugador {0} no es un: {1}".format(player["nombre"], hof))     
 
 def save_file(name_file:str, lista_jugadores:list, i:int):
+    '''
+    creo un archivo csv con las estadisticas con el 
+    indice del jugador de la opcion 2
+    :param name_file: nombre del archivo
+    :param lista_jugadores: lista de jugadores
+    :param i: indice del jugador
+    :return: nada
+    '''
     lista_keys_estadisticas = keys_stats(player_list)   
     lista_keys_player = keys_player(player_list)
             
@@ -373,17 +386,20 @@ def save_file(name_file:str, lista_jugadores:list, i:int):
 flag_op_2 = False            
 player_list = leer_archivo("D:\programacion 1\parcial_00\dt.json")
 indice_selected = ""
+
 while(True):
     
     option = validar_opcion()
     match(option):
+
         case 0:
             print("Hasta la proxima capo, maestro, mastodonte")
             break
 
+        
         case 1:
             show_name_and_pos(player_list)  
-            #anda
+            
 
         case 2:
             print_jugador_indice(player_list)
@@ -392,7 +408,8 @@ while(True):
             change = print_stats_indice(indice_selected, player_list)
             if change == 1:
                 flag_op_2 = True
-            #anda
+            
+
         case 3:
             if flag_op_2 == False:
                 print("\n------------------------------------------------------")
@@ -402,16 +419,14 @@ while(True):
                 save_file("jugador_{0}.csv".
                         format(player_list[indice_selected]["nombre"]),
                         player_list, indice_selected)
-            #list_values = values_player(player_list[11])
-            #list_values.append(values_player(player_list[11]))
-            
-            #list_values.append(list(player_list[11]["estadisticas"].values()))
            
+
         case 4:
             player_name = input("Ingrese el nombre del jugador:...\n")
             player = find_player_by_name(player_name, player_list)
             print_logros(player)
-            #anda
+            
+
         case 5:
             list_sort_by_name = sort_list_by_key(player_list,"nombre")
             retorno = show_mames_stats(list_sort_by_name, "promedio_puntos_por_partido")
@@ -420,38 +435,42 @@ while(True):
                     print(elemento)
             else:
                 print("ocurrio un error")
-            #anda
+            
+
         case 6:
             player_name = input("Ingrese el nombre del jugador:...\n")
             player = find_player_by_name(player_name, player_list)
             member_HOF(player)
+
 
         case 7:
             stat = "rebotes_totales"
             retorno = sort_list_by_stat(player_list, stat)
             if retorno != None :
                 print_player_max_stat(retorno[0], stat)
-                #anda
+                
+
         case 8:
             stat = "porcentaje_tiros_de_campo"
             retorno = sort_list_by_stat(player_list, stat)
             if retorno != None :
                 print_player_max_stat(retorno[0], stat)
-                #anda
+                
         
         case 9:
             stat = "asistencias_totales"
             retorno = sort_list_by_stat(player_list, stat)
             if retorno != None :
                 print_player_max_stat(retorno[0], stat)
-                #anda
+                
+
         case 10:
             stat = "promedio_puntos_por_partido"
             more_than = float(input("Ingrese los puntos a superar\n")) 
             average = average_stat(player_list,stat)
             if average != None:
                 print_player_above_average(player_list, stat, more_than)
-            #anda
+            
         
         case 11:
             stat = "promedio_rebotes_por_partido"
@@ -459,7 +478,7 @@ while(True):
             average = average_stat(player_list,stat)
             if average != None:
                 print_player_above_average(player_list, stat, more_than)
-            #anda
+            
             
         case 12:
             stat = "promedio_asistencias_por_partido"
@@ -467,20 +486,21 @@ while(True):
             average = average_stat(player_list,stat)
             if average != None:
                 print_player_above_average(player_list, stat, more_than)
-            #anda
+            
+
         case 13:
             stat = "robos_totales"
             retorno = sort_list_by_stat(player_list, stat)
             if retorno != None :
                 print_player_max_stat(retorno[0], stat)
-            #anda
+            
 
         case 14:
             stat = "bloqueos_totales"
             retorno = sort_list_by_stat(player_list, stat)          
             if retorno != None :
                print_player_max_stat(retorno[0], stat) 
-            #anda
+            
         
         case 15:
             stat = "porcentaje_tiros_libres"
@@ -488,7 +508,7 @@ while(True):
             average = average_stat(player_list, stat)
             if average != None:
                 print_player_above_average(player_list, stat, more_than)
-            #anda
+            
         
         case 16:
             stat = "promedio_puntos_por_partido"
@@ -497,26 +517,26 @@ while(True):
                   " promedio es: {1}".format(normalize_string(stat),
                                     average_stat(list_sorted_point_p_match[:-1],
                                                 stat)))
-            #anda
+            
         case 17:
             list_sorted_by_logros = sort_by_logros(player_list)
             print("El jugador con mas logros es: {0} con: {1}".
                   format(list_sorted_by_logros[0]["nombre"],
                         len(list_sorted_by_logros[0]["logros"])))
-            #anda
+            
         case 18:
             stat = "porcentaje_tiros_triples"
             more_than = float(input("Ingrese el '%' de tiros triples a superar\n")) 
             average = average_stat(player_list, stat)
             if average != None:
                 print_player_above_average(player_list, stat, more_than)
-            #anda
+            
         case 19:
             stat = "temporadas"
             retorno = sort_list_by_stat(player_list, stat)
             if retorno != None :
                 print_player_max_stat(retorno[0], stat)
-            #anda
+            
         case 20:
             stat = "porcentaje_tiros_de_campo"
             more_than = float(input("Ingrese el '%' de tiros de campo a superar\n")) 
@@ -524,3 +544,5 @@ while(True):
             average = average_stat(list_sorted_by_pos, stat)
             if average != None:
                 print_player_above_average(player_list, stat, more_than, True)
+
+    clear_console()
