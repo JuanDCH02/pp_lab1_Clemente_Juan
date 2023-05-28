@@ -29,7 +29,7 @@ def imprimir_menu():
     print("14. Jugador con la mayor cantidad de bloqueos totales")
     print("15. Jugadores con mas '%' de tiros libres por partido que N...")
     print("16. Promedio de puntos por partido del Dream Team excluyendo el peor"
-                                                                        "promdio")
+                                                                        "promedio")
     print("17. Jugador con mas logros obtenidos")
     print("18. Jugadores con mas '%' de tiros triples por partido que N...")
     print("19. Jugador con la mayor cantidad de temporadas jugadas")
