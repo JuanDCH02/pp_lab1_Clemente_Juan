@@ -172,7 +172,7 @@ def find_player_by_name(name:str, lista_jugadores:list):
     :return: diccionario del jugador
     '''
     name = name.lower().capitalize()
-    pattern = rf"^{name}"
+    pattern = rf"{name}"
     for player in lista_jugadores:
         if re.search(pattern, player["nombre"]):
             return player
