@@ -6,7 +6,7 @@ def clear_console():
     '''
     limpia la consola esperando una tecla
     '''
-    _ = input("Press a key to continue...")
+    _ = input("\nPress a key to continue...")
     os.system("cls")
 
 def imprimir_menu():
@@ -34,6 +34,10 @@ def imprimir_menu():
     print("18. Jugadores con mas '%' de tiros triples por partido que N...")
     print("19. Jugador con la mayor cantidad de temporadas jugadas")
     print("20. Jugadores con mas '%' de tiros de campo por partido que N...")
+    print("21. Cantidad de jugadores por posicion")
+    print("22. Mejor jugador por estadistica")
+    print("23. Ranking de estadisticas de los jugadores")
+    print("24. Jugador con las mejores estadisticas generales")
     print ("0. Salir")
 
 def validar_opcion():
@@ -46,7 +50,7 @@ def validar_opcion():
     result = input("Ingrese opcion:\n")
     if result.isdigit():
         result = int(result)
-        if result >= 0 and result < 21:
+        if result >= 0 and result < 25:
             return result
         else:
             print("------------------------------------------------------")
@@ -104,9 +108,9 @@ def print_logros(jugador:dict):
     if not jugador:
         print("Jugador no existe")
     else:
-        print("Estos son las estadisticas de {0}:".format(jugador["nombre"]))
-        for key, value in jugador["estadisticas"].items():          
-            print("{0}: {1}".format(normalize_string(key), value))
+        print("Estos son los logros de {0}:".format(jugador["nombre"]))
+        for key in jugador["logros"]:          
+            print("{0}".format(normalize_string(key)))
 
 def print_jugador_indice(lista_jugadores:list):
     '''
@@ -276,8 +280,8 @@ def print_player_max_stat(player:dict, stat:str):
     :param stat: estadistica a imprimir
     :return: nada
     ''' 
-    print("El jugador con mas {0} es: \n".format(normalize_string(stat)))
-    print("Nombre: {0} -> {1}: {2}".format(player["nombre"],
+    print("El jugador con mas {0} es: ".format(normalize_string(stat)))
+    print("Nombre: {0} -> {1}: {2}\n".format(player["nombre"],
                             normalize_string(stat), player["estadisticas"][stat]))
 
 def print_player_above_average(lista_jugadores:list, stat:str, average:float,pos:bool = False):
@@ -382,6 +386,139 @@ def save_file(name_file:str, lista_jugadores:list, i:int):
         print("Se creo el archivo: ", name_file)
         return True
     
+def print_player_per_pos(lista_jugadores:list ):
+    '''
+    imprimo la cantidad de jugadores por posicion
+    :param lista_jugadores: lista de jugadores
+    :return: nada
+    '''
+    base = []
+    pivot = []
+    ala_pivot = []
+    alero = []
+    escolta = []
+
+    for player in lista_jugadores:
+        if player["posicion"] == "Base":
+            base.append(player)
+
+        elif player["posicion"] == "Pivot":
+            pivot.append(player)
+        
+        elif player["posicion"] == "Ala-Pivot":
+            ala_pivot.append(player)
+
+        elif player["posicion"] == "Alero":
+            alero.append(player)
+        
+        elif player["posicion"] == "Escolta":
+            escolta.append(player)
+
+    print("\nJugadores por posicion en el Dream Team:\n")
+    print("Total Bases:", len(base))
+    for player in base:
+        print("{} ".format(player["nombre"]))
+
+    print("\nTotal Aleros:", len(alero))
+    for player in alero:
+        print("{} ".format(player["nombre"]))
+
+    print("\nTotal Ala-pivots:", len(ala_pivot))
+    for player in ala_pivot:
+        print("{} ".format(player["nombre"]))
+
+    print("\nTotal Pivots:", len(pivot))
+    for player in pivot:
+        print("{} ".format(player["nombre"]))
+
+    print("\nTotal Escoltas:", len(escolta))
+    for player in escolta:
+        print("{} ".format(player["nombre"]))
+    
+def print_player_per_stat(lista_jugadores:list):
+    '''
+    imprimo el mejor jugador por estadistica
+    :param lista_jugadores: lista de jugadores
+    :return: nada
+    '''
+    jugador = sort_list_by_stat(lista_jugadores, "temporadas")
+    print_player_max_stat(jugador[0], "temporadas")
+
+    jugador = sort_list_by_stat(lista_jugadores, "puntos_totales")
+    print_player_max_stat(jugador[0], "puntos_totales")
+
+    jugador = sort_list_by_stat(lista_jugadores, "promedio_puntos_por_partido")
+    print_player_max_stat(jugador[0], "promedio_puntos_por_partido")
+
+    jugador = sort_list_by_stat(lista_jugadores, "rebotes_totales")
+    print_player_max_stat(jugador[0], "rebotes_totales")
+
+    jugador = sort_list_by_stat(lista_jugadores, "promedio_rebotes_por_partido")
+    print_player_max_stat(jugador[0], "promedio_rebotes_por_partido")
+
+    jugador = sort_list_by_stat(lista_jugadores, "asistencias_totales")
+    print_player_max_stat(jugador[0], "asistencias_totales")
+
+    jugador = sort_list_by_stat(lista_jugadores, "promedio_asistencias_por_partido")
+    print_player_max_stat(jugador[0], "promedio_asistencias_por_partido")
+
+    jugador = sort_list_by_stat(lista_jugadores, "robos_totales")
+    print_player_max_stat(jugador[0], "robos_totales")
+
+    jugador = sort_list_by_stat(lista_jugadores, "bloqueos_totales")
+    print_player_max_stat(jugador[0], "bloqueos_totales")
+
+    jugador = sort_list_by_stat(lista_jugadores, "porcentaje_tiros_de_campo")
+    print_player_max_stat(jugador[0], "porcentaje_tiros_de_campo")
+
+    jugador = sort_list_by_stat(lista_jugadores, "porcentaje_tiros_libres")
+    print_player_max_stat(jugador[0], "porcentaje_tiros_libres")
+
+    jugador = sort_list_by_stat(lista_jugadores, "porcentaje_tiros_triples")
+    print_player_max_stat(jugador[0], "porcentaje_tiros_triples")
+
+def ranking(lista_jugadores:list):
+    
+    lista_ranking = {
+         "nombre": [""],
+        "estadisticas": {   
+            "puntos_totales": [],
+            "asistencias_totales":[],
+            "rebotes_totales": [],
+            "robos_totales": []
+        }
+        
+    }
+
+    for jugador in lista_jugadores:
+
+        lista_ranking["nombre"].append(jugador["nombre"])
+        lista_ranking["estadisticas"]["puntos_totales"].append(jugador["puntos_totales"])
+        lista_ranking["estadisticas"]["asistencias_totales"].append(jugador["asistencias_totales"])
+        lista_ranking["estadisticas"]["rebotes_totales"].append(jugador["rebotes_totales"])
+        lista_ranking["estadisticas"]["robos_totales"].append(jugador["robos_totales"])
+
+    jugador = sort_list_by_stat(lista_ranking, "puntos_totales" )
+    print_player_max_stat(jugador[0], "puntos_totales")
+
+def best_stats(lista_jugadoes:list):
+    stats_totales = 0.0
+    mejor_jugador = None
+
+    if not lista_jugadoes:
+        print("No hay jugadores")
+    else:
+        total_estadisticas = 0.0
+        for jugador in lista_jugadoes:
+            for estadistica in jugador["estadisticas"].values():
+                total_estadisticas += estadistica
+                if stats_totales < total_estadisticas:
+                    mejor_jugador = jugador
+        
+        print("El mejor jugador es: ", mejor_jugador["nombre"])       
+        print("Las estadisticas del mejor jugador son: ")
+        for element in mejor_jugador["estadisticas"]:
+            print("{}: {}".format(element, mejor_jugador["estadisticas"][element]))
 
 flag_op_2 = False            
 player_list = leer_archivo("D:\programacion 1\parcial_00\dt.json")
@@ -524,6 +661,7 @@ while(True):
                   format(list_sorted_by_logros[0]["nombre"],
                         len(list_sorted_by_logros[0]["logros"])))
             
+
         case 18:
             stat = "porcentaje_tiros_triples"
             more_than = float(input("Ingrese el '%' de tiros triples a superar\n")) 
@@ -531,12 +669,14 @@ while(True):
             if average != None:
                 print_player_above_average(player_list, stat, more_than)
             
+
         case 19:
             stat = "temporadas"
             retorno = sort_list_by_stat(player_list, stat)
             if retorno != None :
                 print_player_max_stat(retorno[0], stat)
             
+
         case 20:
             stat = "porcentaje_tiros_de_campo"
             more_than = float(input("Ingrese el '%' de tiros de campo a superar\n")) 
@@ -545,4 +685,15 @@ while(True):
             if average != None:
                 print_player_above_average(player_list, stat, more_than, True)
 
+
+        case 21 :
+            print_player_per_pos(player_list)
+        
+
+        case 22 : 
+            print_player_per_stat(player_list)
+
+
+        case 24 :
+            best_stats(player_list)
     clear_console()
